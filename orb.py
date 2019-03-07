@@ -1,28 +1,38 @@
-# encoding: utf-8
-
 import os
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 
 from utils import *
 
-img22 = get_image("IMG_0237.JPG")
-print img22.shape
-img1,_ = get_image('IMG_0824_1.JPG', True)
-img2,_ = get_image('IMG_0824_1.JPG', True)
+def draw():
 
 
-#img1 = Gaussian_Blur(img1)
+# cv2.line(img2, (right_o_x, right_o_y), (top_o_x, top_o_y), (255, 0, 255), 5)
+# cv2.line(img2, (top_o_x, top_o_y), (left_o_x, left_o_y), (255, 0, 255), 5)
+# cv2.line(img2, (left_o_x, left_o_y), (bottom_o_x, bottom_o_y), (255, 0, 255), 5)
+# cv2.line(img2, (bottom_o_x, bottom_o_y), (right_o_x, right_o_y), (255, 0, 255), 5)
+
+# bottom one points
+
+# image1 = cv2.drawKeypoints(image=image1,keypoints = kp1,
+#  outImage=image1, color=(255,0,255),
+# flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+# cv2.imshow('orb_keypoints1',img2)
+    return
+
+
+img1,_ = get_image('IMG_0824.JPG')
+img2,_ = get_image('IMG_0824.JPG')
+
+img1 = Gaussian_Blur(img1)
 #img2 = median(img2)
-#img2 = Gaussian_Blur(img2)
+img2 = Gaussian_Blur(img2)
 
-orb = cv2.ORB_create(10000)
+orb = cv2.ORB_create(5000)
 kp1, des1 = orb.detectAndCompute(img1,None)
 kp2, des2 = orb.detectAndCompute(img2,None)
 points = cv2.KeyPoint_convert(kp2)
-
-hull = cv2.convexHull(points)
-print hull
 
 index = points.argsort(axis=0)
 
@@ -56,5 +66,4 @@ matches = sorted(matches, key = lambda x:x.distance)
 img3 = cv2.drawMatches(img1=img1,keypoints1=kp1,img2=img2,keypoints2=kp2,
                     matches1to2=matches, outImg=img2, flags=2)
 plt.imshow(img3),plt.show()
-
 cv2.waitKey(0)
