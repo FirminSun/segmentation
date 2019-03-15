@@ -11,7 +11,7 @@ DATA_DIR voc格式数据存放路径，IMAGE_DATA_DIR jpeg原图存放文件夹�
 
 2.模型训练
 python train.py --model_dir MODEL_DIR --pre_trained_model PRE_TRAINED_MODEL
-PRE_TRAINED_MODEL 为resnet101基础模型(models文件夹)， MODEL_DIR为训练整个模型的checkpoints存放位置，如该位置有有效的
+PRE_TRAINED_MODEL 为resnet101基础模型(http://download.tensorflow.org/models/resnet_v2_101_2017_04_14.tar.gz)， MODEL_DIR为训练整个模型的checkpoints存放位置，如该位置有有效的
 checkpoints训练时将会加载该数据。详细见train.py。
 
 3.模型前向测试测试：
