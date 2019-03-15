@@ -1,4 +1,4 @@
-deeplab v3实现简单背景商品的分割。
+# deeplab v3实现简单背景商品的分割。
 训练测试验证集数据，FTP:/segmentation_data/
 环境tensorflow1.6+, python3.5
 
