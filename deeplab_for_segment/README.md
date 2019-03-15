@@ -2,26 +2,26 @@
 训练测试验证集数据，FTP:/segmentation_data/
 环境tensorflow1.6+, python3.5
 
-1.训练数据制作:tfrecord数据
+## 1.训练数据制作:tfrecord数据
 python create_pascal_tf_record.py --data_dir DATA_DIR \
                                   --image_data_dir IMAGE_DATA_DIR \
                                   --label_data_dir LABEL_DATA_DIR 
 DATA_DIR voc格式数据存放路径，IMAGE_DATA_DIR jpeg原图存放文件夹，LABEL_DATA_DIR png标签图片存放文件夹
 详见create_pascal_tf_record.py代码，可以运行run_create_tfrecord.sh脚本执行数据制作
 
-2.模型训练
+## 2.模型训练
 python train.py --model_dir MODEL_DIR --pre_trained_model PRE_TRAINED_MODEL
 PRE_TRAINED_MODEL 为resnet101基础模型(https://github.com/tensorflow/models/tree/master/research/slim 下载：resnet_v2_101_2017_04_14.tar.gz)， MODEL_DIR为训练整个模型的checkpoints存放位置，如该位置有有效的
 checkpoints训练时将会加载该数据。详细见train.py。
 
-3.模型前向测试测试：
+## 3.模型前向测试测试：
 python inference.py --data_dir DATA_DIR \
                     --infer_data_list INFER_DATA_LIST \
                     --model_dir MODEL_DIR 
 
 DATA_DIR:存放voc格式数据目录，INFER_DATA_LIST：测试图片的txt列表，每行为图片名（必须为jpeg格式），MODEL_DIR：模型存放文件。
 
-4.模型验证：
+## 4.模型验证：
 python evaluate.py --help 查看模型验证参数。
 
 目前模型训练状态：
