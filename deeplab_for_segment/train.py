@@ -7,6 +7,7 @@ from __future__ import print_function
 import argparse
 import os
 import sys
+import configparser
 
 import tensorflow as tf
 import deeplab_model
@@ -209,6 +210,29 @@ def input_fn(is_training, data_dir, batch_size, num_epochs=1):
   #print("\n\n\n\n\n\n",labels,",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
   return images, labels
 
+def load_setting_cfg(args):
+    filename="./config.cfg"
+    if(not os.path.exists(filename)):
+      print("file config.cfg not exist! will run default configue"%filename)
+      return
+
+    with open(filename, 'r') as fr:
+        cfg = configparser.ConfigParser()
+        cfg.readfp(fr)
+    # 读取所有sections：
+    secs = cfg.sections()         # ['TRAIN', 'TEST']
+    args_dict = args.__dict__
+    ops0 = dict(cfg.items(secs[0]))      #options of ['TRAIN'] 
+    # ops1 = dict(cfg.items(secs[1]))      #options of ['TEST'] 
+    for k,v in ops0.items():
+        if k in args_dict.keys():
+          args_dict[k] = type(args_dict[k])(v)
+
+    # for k,v in ops1.items():
+    #     if k in args_dict.keys():
+    #         args_dict[k] = v
+
+    return
 
 def main(unused_argv):
   # Using the Winograd non-fused algorithms provides a small performance boost.
@@ -282,4 +306,10 @@ def main(unused_argv):
 if __name__ == '__main__':
   tf.logging.set_verbosity(tf.logging.INFO)
   FLAGS, unparsed = parser.parse_known_args()
+  #用配置文件config.cfg中的覆盖配置
+  load_setting_cfg(FLAGS)
+  # print("test model_dir",FLAGS.model_dir)
+  # print("test train_epochs",type(FLAGS.train_epochs))
+  # print("test max_iter",FLAGS.max_iter)
+
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)

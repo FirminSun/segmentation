@@ -133,6 +133,7 @@ def deeplab_v3_generator(num_classes,
       tf.train.init_from_checkpoint(pre_trained_model,
                                     {v.name.split(':')[0]: v for v in variables_to_restore})
     #print("\n\n\n\n\n\n\n\n\n-----------------------------------------------------------------------------",num_classes)
+    print("test input shape",inputs)
     inputs_size = tf.shape(inputs)[1:3]
     net = end_points[base_architecture + '/block4']#(?,33,33,2048)
     #print("\n\n\n\n\n\n\n\n\n\n--------------------",net)
@@ -140,8 +141,8 @@ def deeplab_v3_generator(num_classes,
     with tf.variable_scope("upsampling_logits"):
       net = layers_lib.conv2d(net, num_classes, [1, 1], activation_fn=None, normalizer_fn=None, scope='conv_1x1')
       logits = tf.image.resize_bilinear(net, inputs_size, name='upsample')
-      #print("\n\n\n\n\n\n\n\n\n\n--netintupsampling------------------",net)
-    return logits #shape is (33,33,2)
+      print("\n\n\n\n\n\n\n\n\n\n--logits shape------------------",logits)
+    return logits ##shape=(?, 513, 513, 3)
 
   return model
 
@@ -160,9 +161,9 @@ def deeplabv3_model_fn(features, labels, mode, params):
                                  params['base_architecture'],
                                  params['pre_trained_model'],
                                  params['batch_norm_decay'])
-  
+  print("test input fea shape",features)
   logits = network(features, mode == tf.estimator.ModeKeys.TRAIN)
-  #print("\n\n\n\n\n\n\n\n\n\n--network------------------",logits)
+  print("\n\n\n\n\n\n\n\n\n\n--network------------------",logits)
   pred_classes = tf.expand_dims(tf.argmax(logits, axis=3, output_type=tf.int32), axis=3)
 
   pred_decoded_labels = tf.py_func(preprocessing.decode_labels,
