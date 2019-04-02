@@ -15,7 +15,7 @@ PRE_TRAINED_MODEL 为resnet101基础模型(https://github.com/tensorflow/models/
 checkpoints训练时将会加载该数据。详细见train.py。
 
 ## 3.模型前向测试测试：
-修改于2019-04-02：添加向ftp服务器上下载测试数据测试完成打包结果，发送至ftp服务器并发送邮件通知相关人员,添加配置文件config.cfg
+修改于2019-04-02：添加向ftp服务器上下载测试数据测试完成打包结果，发送至ftp服务器并发送邮件通知相关人员,添加配置文件config.cfg,训练和测试通过配置文件配置
 python inference.py --data_dir DATA_DIR \
                     --infer_data_list INFER_DATA_LIST \
                     --model_dir MODEL_DIR 
