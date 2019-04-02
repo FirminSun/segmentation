@@ -51,12 +51,35 @@ def download(ftp, remote_path, localAbsDir):
         remote_path = format_path(remote_path)
         localAbsDir = format_path(localAbsDir)
 
+<<<<<<< HEAD
     
         print("localAbsDir:",localAbsDir)
         if os.path.isdir(remote_path):
             rs = download_dir(ftp, remote_path, localAbsDir)
         else:
             rs = download_file(ftp, remote_path, localAbsDir,overwrite=True)
+=======
+        remoteRel = ""
+        if remote_path == "":
+            remote_path = ftp_config.ftp_home
+        else:
+            if remote_path.startswith(ftp_config.ftp_home):
+                remoteRel = remote_path.replace(ftp_config.ftp_home, "/")
+                remoteRel = format_path(remoteRel)
+            else:
+                remoteRel = remote_path
+
+        if localAbsDir == "":
+            localAbsDir = ftp_config.localDir
+            localAbsDir = format_path(localAbsDir)
+
+        remoteAbs = format_path(ftp_config.ftp_home, remoteRel)
+
+        if os.path.isdir(remoteAbs):
+            rs = download_dir(ftp, remoteRel, localAbsDir)
+        else:
+            rs = download_file(ftp, remoteRel, localAbsDir,overwrite=True)
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
 
         if rs[0] == -1:
             result[0] = -1
@@ -130,6 +153,7 @@ def download_file(ftp, remoteRelPath, localAbsDir, overwrite=False):
 
     try:
         fileName = os.path.basename(remoteRelPath)  # file name
+<<<<<<< HEAD
         localAbsPath = os.path.join(localAbsDir, fileName)
        
         # splitPaths = os.path.split(localAbsPath)
@@ -147,6 +171,23 @@ def download_file(ftp, remoteRelPath, localAbsDir, overwrite=False):
             ftp.retrbinary("RETR %s" % remoteRelPath, handle.write)
             handle.close()
             ret_msg = "download " + fileName + " success"
+=======
+
+        localAbsPath = format_path(localAbsDir, fileName)
+        splitPaths = os.path.split(localAbsPath)
+
+        lad = splitPaths[0]
+        lad = format_path(lad)
+        if not os.path.exists(lad):
+            os.makedirs(lad)
+
+        # if exists, not download(default)
+        if not os.path.exists(localAbsPath) or overwrite == True:
+            handle = open(localAbsPath, "wb")
+            ftp.retrbinary("RETR %s" % remoteRelPath, handle.write, 1024)
+            handle.close()
+            ret_msg = "download " + splitPaths[1] + " success"
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
         else:
             ret_msg = '{} is existed! Skip'.format(localAbsPath)
 
@@ -169,6 +210,7 @@ def upload(ftp, server_dir, local_path):
     result = [1, ""]
 
     try:
+<<<<<<< HEAD
         # server_dir = format_path(server_dir)
         # local_path = format_path(local_path)
 
@@ -189,6 +231,28 @@ def upload(ftp, server_dir, local_path):
         #     if server_dir.startswith(ftp_config.ftp_home):
         #         server_dir = server_dir.replace(ftp_config.ftp_home, "/")
         #         server_dir = format_path(server_dir)
+=======
+        server_dir = format_path(server_dir)
+        local_path = format_path(local_path)
+
+        localRelDir = ""
+        if local_path == "":
+            local_path = ftp_config.localDir
+            local_path = format_path(local_path)
+        else:
+            if local_path.startswith(ftp_config.localDir):  #  absolute path
+                localRelDir = local_path.replace(ftp_config.localDir, "/")
+                localRelDir = format_path(localRelDir)
+            else:  #
+                local_path = format_path(ftp_config.localDir, local_path)
+
+        if server_dir == "":
+            server_dir = format_path("/uploadFiles/", localRelDir)
+        else:
+            if server_dir.startswith(ftp_config.ftp_home):
+                server_dir = server_dir.replace(ftp_config.ftp_home, "/")
+                server_dir = format_path(server_dir)
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
 
         if os.path.isdir(local_path):  # isDir
             rs = upload_dir(ftp, server_dir, local_path)

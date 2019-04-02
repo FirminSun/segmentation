@@ -20,12 +20,18 @@ import configparser
 from tensorflow.python import debug as tf_debug
 import send_email as SE
 import ftp_upload as FU
+<<<<<<< HEAD
 import ftp_utils
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--download_test_data_path', type=str, default="no",
                     help='whether download test images from tfp: [yes, no]')
 parser.add_argument('--zip_send_path', type=str, default="no",
+=======
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--zip_send_email', type=str, default="no",
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
                     help='whether zip result send to ftp and send notice email: [yes, no]')
 parser.add_argument('--save_mask', type=str, default="yes",
                     help='whether save mask of result: [yes, no]')
@@ -56,8 +62,12 @@ parser.add_argument('--output_stride', type=int, default=16,
 parser.add_argument('--debug', action='store_true',
                     help='Whether to use debugger to track down bad values during training.')
 
+<<<<<<< HEAD
 parser.add_argument('--num_classes', type=int, default=2,
                     help='numble of classes.')
+=======
+_NUM_CLASSES = 2
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
 
 def get_setting_cfg():
   filename="./config.cfg"
@@ -109,6 +119,7 @@ def zip_file_path(input_path, output_path, output_name):
     f.close()
     return output_path + r"/" + output_name
 
+<<<<<<< HEAD
 def zip_and_set_email(filedir, remote_path_u):
   # #压缩
   time_str = time.strftime('%Y-%m-%d',time.localtime(time.time()))
@@ -125,6 +136,20 @@ def zip_and_set_email(filedir, remote_path_u):
   print("now send email...")
   content = "hi all!\n"+ \
             "segmentation result data has uploaded to ftp server address:" \
+=======
+def zip_and_set_email(filedir):
+  #压缩
+  time_str = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+  print(time_str)
+  zip_name = "seg_"+time_str+"_service.zip"
+  zip_file_path(filedir, './', zip_name)
+  #发送到ftp
+  remote_path_u = "/segmentation_data/test_result/"
+  FU.run_upload(remote_path_u,os.getcwd()+"/"+zip_name)
+  #发送邮件  
+  content = "hi all!\n"+ \
+            "segmentation data has uploaded to ftp server address:" \
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
             +remote_path_u+zip_name+", thank you!"
   SE.notify(content)
   return True
@@ -147,7 +172,11 @@ def main(unused_argv):
           'base_architecture': FLAGS.base_architecture,
           'pre_trained_model': None,
           'batch_norm_decay': None,
+<<<<<<< HEAD
           'num_classes': FLAGS.num_classes,
+=======
+          'num_classes': _NUM_CLASSES,
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
       })
   image_files = []
 
@@ -191,6 +220,7 @@ def main(unused_argv):
       cv2.imwrite(path_to_mask,mask)
     orgdata = cv2.imread(image_path)
     process.process1(mask,orgdata,output_dir,image_path.split('/')[-1])
+<<<<<<< HEAD
 
     if(FLAGS.zip_send_path != "no"):
       zip_and_set_email(FLAGS.output_dir, FLAGS.zip_send_path)
@@ -214,6 +244,11 @@ def download_test_data(remote_path,local_path):
       for file in f.namelist():
         f.extract(file,local_path)
     return
+=======
+    
+    
+    
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
 
 def load_setting_cfg(args):
     filename="./config.cfg"
@@ -235,6 +270,10 @@ def load_setting_cfg(args):
     for k,v in ops1.items():
         if k in args_dict.keys():
             args_dict[k] = type(args_dict[k])(v)
+<<<<<<< HEAD
+=======
+
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
     return
 
 
@@ -243,10 +282,16 @@ if __name__ == '__main__':
   FLAGS, unparsed = parser.parse_known_args()
   #用配置文件config.cfg中的覆盖配置
   load_setting_cfg(FLAGS)
+<<<<<<< HEAD
   if(FLAGS.download_test_data_path != "no" and FLAGS.data_dir):
     download_test_data(FLAGS.download_test_data_path,FLAGS.data_dir)
 
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
 
   
+=======
+  tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+  if(FLAGS.zip_send_email=="yes"):
+    zip_and_set_email(FLAGS.output_dir)
+>>>>>>> a9edff3cf27d4816c1c4159c5b10b70e16eed107
 
