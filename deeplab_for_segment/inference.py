@@ -189,7 +189,7 @@ def main(unused_argv):
       output_mask = image_basename + '_mask.png'
       path_to_mask = os.path.join(output_dir, output_mask)
       cv2.imwrite(path_to_mask,mask)
-    orgdata = cv2.imread(image_path)
+    orgdata = cv2.imread(image_path, cv2.IMREAD_COLOR | cv2.IMREAD_IGNORE_ORIENTATION)
     process.process1(mask,orgdata,output_dir,image_path.split('/')[-1])
 
     if(FLAGS.zip_send_path != "no"):
