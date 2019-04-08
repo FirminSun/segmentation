@@ -192,8 +192,8 @@ def main(unused_argv):
     orgdata = cv2.imread(image_path, cv2.IMREAD_COLOR | cv2.IMREAD_IGNORE_ORIENTATION)
     process.process1(mask,orgdata,output_dir,image_path.split('/')[-1])
 
-    if(FLAGS.zip_send_path != "no"):
-      zip_and_set_email(FLAGS.output_dir, FLAGS.zip_send_path)
+  if(FLAGS.zip_send_path != "no"):
+    zip_and_set_email(FLAGS.output_dir, FLAGS.zip_send_path)
 
 def download_test_data(remote_path,local_path):
     print("now down load images form ftp...")

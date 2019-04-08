@@ -9,6 +9,20 @@ def erode(img, kernel_size = 11):
     erodeimg = cv2.erode(img,kernel,iterations = 4)
     # #cv2.imshow("after erode",erodeimg)
     return erodeimg
+def is_near_edge(labeled_img,ind):
+    xy = np.where(labeled_img==ind)
+    testimg = np.zeros(labeled_img.shape,np.uint8)
+    testimg[xy] = 255
+    h,w = labeled_img.shape[:2]
+    # cv2.imwrite(str(ind)+"_test.jpg",testimg)
+    # print(np.where(xy[0]==h-1)[0].shape)
+    # print(np.where(xy[1]==w-1)[0].shape)
+
+    if(np.where(xy[0]==h-1)[0].shape!=(0,) or np.where(xy[1]==w-1)[0].shape!=(0,)):
+        return True
+    else:
+        return False
+    
 
 # 查找最大连通区域
 def largestConnectComponent(bw_img):
@@ -27,7 +41,7 @@ def largestConnectComponent(bw_img):
         # img[np.where(labeled_img == i)] = 255
         # cv2.imshow("test",img)
         # cv2.waitKey()
-        if np.sum(labeled_img == i) > max_num:
+        if not is_near_edge(labeled_img,i) and np.sum(labeled_img == i) > max_num:
             max_num = np.sum(labeled_img == i)
             # #print("max num:",max_num)
             max_label = i
