@@ -243,8 +243,8 @@ if __name__ == '__main__':
   FLAGS, unparsed = parser.parse_known_args()
   #用配置文件config.cfg中的覆盖配置
   load_setting_cfg(FLAGS)
-  if(FLAGS.download_test_data_path != "no" and FLAGS.data_dir):
-    download_test_data(FLAGS.download_test_data_path,FLAGS.data_dir)
+  # if(FLAGS.download_test_data_path != "no" and FLAGS.data_dir):
+  #   download_test_data(FLAGS.download_test_data_path,FLAGS.data_dir)
 
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
 

@@ -15,9 +15,10 @@ def run_upload(server_path, local_abs_path):
         server_path,
         local_abs_path
     )
-
-    print("all completed" if result[0] == 1 else "some failed")
-    print(result[1])
+    if(result[0] == 1):
+       print("all completed" )
+    else:
+        raise(result[1]) 
     # sys.exit()
 
 parser = argparse.ArgumentParser(description='Get the data info')
